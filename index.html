@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hoàng yêu Vy 💖</title>
+<style>
+  body {
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: radial-gradient(circle at center, #1a1f3b, #0d1224);
+    color: white;
+    font-family: "Poppins", sans-serif;
+  }
+
+  h1 {
+    position: absolute;
+    top: 30px;
+    font-size: 2em;
+    text-align: center;
+    animation: fadeIn 2s ease;
+  }
+
+  #gameArea {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+  }
+
+  .heart {
+    position: absolute;
+    font-size: 40px;
+    cursor: pointer;
+    animation: float 3s infinite ease-in-out alternate;
+  }
+
+  @keyframes float {
+    from { transform: translateY(0px); }
+    to { transform: translateY(-20px); }
+  }
+
+  #message {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 2.5em;
+    color: #ff6b9a;
+    text-shadow: 0 0 10px #ff9bbd;
+    opacity: 0;
+    white-space: pre-wrap;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .floatingHeart {
+    position: fixed;
+    font-size: 24px;
+    color: #ff8db3;
+    pointer-events: none;
+    opacity: 0.9;
+    animation: rise 4s linear forwards;
+  }
+
+  @keyframes rise {
+    0% { transform: translateY(0) scale(1); opacity: 1; }
+    100% { transform: translateY(-600px) scale(1.3); opacity: 0; }
+  }
+</style>
+</head>
+<body>
+  <div id="gameArea">
+    <h1>💗 Hoàng yêu Vy 💗</h1>
+    <div class="heart" id="heart">💖</div>
+    <div id="message"></div>
+  </div>
+
+<script>
+  const heart = document.getElementById('heart');
+  const message = document.getElementById('message');
+  const gameArea = document.getElementById('gameArea');
+  let clicks = 0;
+  let gameActive = true;
+
+  // random position cho trái tim
+  function moveHeart() {
+    if (!gameActive) return;
+    const x = Math.random() * (window.innerWidth - 80);
+    const y = Math.random() * (window.innerHeight - 80);
+    heart.style.left = `${x}px`;
+    heart.style.top = `${y}px`;
+  }
+
+  // tạo hiệu ứng trái tim bay lên
+  function floatingHearts(count = 20) {
+    for (let i = 0; i < count; i++) {
+      const fh = document.createElement('div');
+      fh.classList.add('floatingHeart');
+      fh.textContent = '💖';
+      fh.style.left = Math.random() * 100 + 'vw';
+      fh.style.top = '100vh';
+      fh.style.fontSize = Math.random() * 20 + 10 + 'px';
+      fh.style.animationDuration = 3 + Math.random() * 2 + 's';
+      document.body.appendChild(fh);
+      setTimeout(() => fh.remove(), 5000);
+    }
+  }
+
+  // typing effect
+  function typeMessage(text, i = 0) {
+    if (i < text.length) {
+      message.style.opacity = 1;
+      message.textContent += text.charAt(i);
+      setTimeout(() => typeMessage(text, i + 1), 100);
+    }
+  }
+
+  // click vào trái tim
+  heart.addEventListener('click', () => {
+    clicks++;
+    moveHeart();
+    if (clicks >= 3) {
+      gameActive = false;
+      heart.style.display = 'none';
+      floatingHearts(50);
+      setTimeout(() => {
+        typeMessage("Anh yêu em 💖");
+      }, 1000);
+    }
+  });
+
+  // di chuyển trái tim liên tục
+  setInterval(moveHeart, 1500);
+  moveHeart();
+</script>
+</body>
+</html>
