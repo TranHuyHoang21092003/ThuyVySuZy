@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Hoàng yêu Vy 💖</title>
+<title>Ghép Hình Trái Tim 💖</title>
 <style>
   * {
     margin: 0;
@@ -51,14 +51,16 @@
   
   #title {
     position: absolute;
-    top: 40px;
-    font-size: 2.5em;
+    top: 30px;
+    font-size: 2.2em;
     font-weight: bold;
     color: white;
     text-shadow: 0 0 20px rgba(255, 255, 255, 0.5),
                  0 0 40px rgba(255, 107, 154, 0.8);
     animation: titleGlow 2s ease-in-out infinite;
     z-index: 10;
+    text-align: center;
+    padding: 0 20px;
   }
   
   @keyframes titleGlow {
@@ -74,150 +76,119 @@
     }
   }
   
-  #scoreBoard {
+  #instruction {
     position: absolute;
-    top: 120px;
+    top: 100px;
+    font-size: 1.1em;
+    color: white;
     background: rgba(255, 255, 255, 0.2);
     backdrop-filter: blur(10px);
-    padding: 15px 30px;
-    border-radius: 50px;
+    padding: 10px 25px;
+    border-radius: 30px;
     border: 2px solid rgba(255, 255, 255, 0.3);
-    font-size: 1.2em;
-    color: white;
-    font-weight: bold;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-    animation: scoreFloat 3s ease-in-out infinite;
+    animation: fadeInDown 1s ease-out;
+    text-align: center;
   }
   
-  @keyframes scoreFloat {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-10px); }
+  @keyframes fadeInDown {
+    from {
+      opacity: 0;
+      transform: translateY(-20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
   
-  #gameArea {
-    position: relative;
+  #puzzleGrid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    max-width: 500px;
     width: 90vw;
-    height: 70vh;
-    max-width: 800px;
-    max-height: 600px;
+    aspect-ratio: 1;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(20px);
+    border-radius: 30px;
+    border: 3px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    animation: gridFadeIn 0.8s ease-out;
   }
   
-  .heart {
-    position: absolute;
-    font-size: 60px;
+  @keyframes gridFadeIn {
+    from {
+      opacity: 0;
+      transform: scale(0.8);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+  
+  .puzzle-piece {
+    aspect-ratio: 1;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 3em;
     cursor: pointer;
     user-select: none;
-    transition: transform 0.3s ease;
-    filter: drop-shadow(0 0 15px rgba(255, 107, 154, 0.8));
-    animation: heartFloat 3s ease-in-out infinite;
-    z-index: 5;
+    transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    border: 3px solid rgba(255, 255, 255, 0.4);
+    position: relative;
+    overflow: hidden;
   }
   
-  .heart:hover {
-    transform: scale(1.3) rotate(15deg);
+  .puzzle-piece::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.2) 0%, transparent 100%);
+    opacity: 0;
+    transition: opacity 0.3s;
   }
   
-  .heart:active {
+  .puzzle-piece:hover::before {
+    opacity: 1;
+  }
+  
+  .puzzle-piece.selected {
+    transform: scale(0.95) rotate(5deg);
+    border-color: #ffd700;
+    box-shadow: 0 0 30px rgba(255, 215, 0, 0.8);
+  }
+  
+  .puzzle-piece:active {
     transform: scale(0.9);
   }
   
-  @keyframes heartFloat {
-    0%, 100% { 
-      transform: translateY(0) rotate(0deg);
-    }
-    25% { 
-      transform: translateY(-15px) rotate(-5deg);
-    }
-    75% { 
-      transform: translateY(-15px) rotate(5deg);
-    }
-  }
-  
-  .particle {
-    position: absolute;
-    pointer-events: none;
-    font-size: 20px;
-    animation: particleRise 1.5s ease-out forwards;
-    z-index: 20;
-  }
-  
-  @keyframes particleRise {
-    0% {
-      transform: translateY(0) scale(1) rotate(0deg);
-      opacity: 1;
-    }
-    100% {
-      transform: translateY(-100px) scale(0.5) rotate(360deg);
-      opacity: 0;
-    }
-  }
-  
-  #message {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    font-size: 3em;
-    font-weight: bold;
-    color: white;
-    text-shadow: 0 0 30px rgba(255, 107, 154, 1),
-                 0 0 60px rgba(255, 107, 154, 0.8),
-                 0 0 90px rgba(255, 107, 154, 0.6);
-    opacity: 0;
-    white-space: nowrap;
-    z-index: 100;
-    animation: messageReveal 1s ease-out forwards;
-  }
-  
-  @keyframes messageReveal {
-    0% {
-      opacity: 0;
-      transform: translate(-50%, -50%) scale(0.5);
-    }
-    50% {
-      transform: translate(-50%, -50%) scale(1.2);
-    }
-    100% {
-      opacity: 1;
-      transform: translate(-50%, -50%) scale(1);
-    }
-  }
-  
-  .floatingHeart {
-    position: fixed;
-    pointer-events: none;
-    font-size: 30px;
-    color: #ff6b9a;
-    filter: drop-shadow(0 0 10px rgba(255, 107, 154, 0.8));
-    animation: riseUp 4s ease-out forwards;
-    z-index: 50;
-  }
-  
-  @keyframes riseUp {
-    0% {
-      transform: translateY(0) scale(1) rotate(0deg);
-      opacity: 1;
-    }
-    50% {
-      transform: translateY(-300px) scale(1.2) rotate(180deg);
-      opacity: 0.8;
-    }
-    100% {
-      transform: translateY(-600px) scale(1.5) rotate(360deg);
-      opacity: 0;
-    }
-  }
+  .color-0 { background: linear-gradient(135deg, #ff6b9a, #ff8db3); }
+  .color-1 { background: linear-gradient(135deg, #a78bfa, #c4b5fd); }
+  .color-2 { background: linear-gradient(135deg, #60a5fa, #93c5fd); }
+  .color-3 { background: linear-gradient(135deg, #34d399, #6ee7b7); }
+  .color-4 { background: linear-gradient(135deg, #fbbf24, #fcd34d); }
+  .color-5 { background: linear-gradient(135deg, #f87171, #fca5a5); }
+  .color-6 { background: linear-gradient(135deg, #fb923c, #fdba74); }
+  .color-7 { background: linear-gradient(135deg, #ec4899, #f472b6); }
+  .color-8 { background: linear-gradient(135deg, #8b5cf6, #a78bfa); }
   
   .sparkle {
     position: fixed;
-    width: 4px;
-    height: 4px;
+    width: 6px;
+    height: 6px;
     background: white;
     border-radius: 50%;
     pointer-events: none;
-    animation: sparkleAnimation 1.5s ease-out forwards;
-    box-shadow: 0 0 10px white;
-    z-index: 60;
+    animation: sparkleAnimation 1s ease-out forwards;
+    box-shadow: 0 0 15px white;
+    z-index: 1000;
   }
   
   @keyframes sparkleAnimation {
@@ -231,18 +202,42 @@
     }
   }
   
+  .floatingHeart {
+    position: fixed;
+    pointer-events: none;
+    font-size: 30px;
+    filter: drop-shadow(0 0 10px rgba(255, 107, 154, 0.8));
+    animation: riseUp 4s ease-out forwards;
+    z-index: 999;
+  }
+  
+  @keyframes riseUp {
+    0% {
+      transform: translateY(0) scale(1) rotate(0deg);
+      opacity: 1;
+    }
+    50% {
+      transform: translateY(-300px) scale(1.3) rotate(180deg);
+      opacity: 0.9;
+    }
+    100% {
+      transform: translateY(-700px) scale(1.6) rotate(360deg);
+      opacity: 0;
+    }
+  }
+  
   #congratsOverlay {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.7);
-    backdrop-filter: blur(10px);
+    background: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(15px);
     display: none;
     align-items: center;
     justify-content: center;
-    z-index: 1000;
+    z-index: 2000;
     animation: fadeIn 0.5s ease-out;
   }
   
@@ -254,34 +249,35 @@
   #congratsMessage {
     text-align: center;
     color: white;
-    animation: bounceIn 1s ease-out;
+    animation: bounceIn 1.2s cubic-bezier(0.68, -0.55, 0.265, 1.55);
   }
   
   @keyframes bounceIn {
     0% {
-      transform: scale(0);
+      transform: scale(0) rotate(-180deg);
       opacity: 0;
     }
     50% {
-      transform: scale(1.2);
+      transform: scale(1.3) rotate(10deg);
     }
     100% {
-      transform: scale(1);
+      transform: scale(1) rotate(0deg);
       opacity: 1;
     }
   }
   
   .mainText {
-    font-size: 4em;
+    font-size: 5em;
     font-weight: bold;
-    background: linear-gradient(45deg, #ff6b9a, #ffd700, #ff6b9a);
-    background-size: 200% 200%;
+    background: linear-gradient(45deg, #ff6b9a, #ffd700, #ff6b9a, #a78bfa);
+    background-size: 300% 300%;
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
     animation: gradientShift 3s ease infinite;
-    text-shadow: 0 0 50px rgba(255, 107, 154, 0.5);
-    margin: 20px 0;
+    text-shadow: 0 0 80px rgba(255, 107, 154, 0.8);
+    margin: 30px 0;
+    line-height: 1.2;
   }
   
   @keyframes gradientShift {
@@ -290,105 +286,171 @@
   }
   
   .subText {
-    font-size: 1.5em;
-    margin-top: 10px;
-    opacity: 0.9;
+    font-size: 2em;
+    margin-top: 20px;
+    opacity: 0.95;
+    animation: fadeInUp 1s ease-out 0.5s both;
+  }
+  
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    to {
+      opacity: 0.95;
+      transform: translateY(0);
+    }
+  }
+  
+  #moveCounter {
+    position: absolute;
+    bottom: 30px;
+    font-size: 1.3em;
+    color: white;
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+    padding: 12px 30px;
+    border-radius: 50px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    font-weight: bold;
   }
   
   @media (max-width: 768px) {
-    #title { font-size: 1.8em; top: 20px; }
-    #scoreBoard { font-size: 1em; top: 80px; padding: 10px 20px; }
-    .heart { font-size: 50px; }
-    #message { font-size: 2em; }
-    .mainText { font-size: 2.5em; }
-    .subText { font-size: 1.2em; }
+    #title { font-size: 1.6em; top: 20px; }
+    #instruction { font-size: 0.95em; top: 80px; padding: 8px 20px; }
+    #puzzleGrid { gap: 8px; padding: 15px; }
+    .puzzle-piece { font-size: 2.5em; border-radius: 15px; }
+    .mainText { font-size: 3em; }
+    .subText { font-size: 1.3em; }
+    #moveCounter { font-size: 1.1em; bottom: 20px; padding: 10px 25px; }
   }
   
   @media (max-width: 480px) {
-    #title { font-size: 1.5em; }
-    .heart { font-size: 40px; }
-    #message { font-size: 1.5em; }
-    .mainText { font-size: 2em; }
-    .subText { font-size: 1em; }
+    #title { font-size: 1.3em; }
+    #instruction { font-size: 0.85em; top: 70px; }
+    .puzzle-piece { font-size: 2em; }
+    .mainText { font-size: 2.2em; }
+    .subText { font-size: 1.1em; }
   }
 </style>
 </head>
 <body>
   <div id="gameContainer">
-    <div id="title">💗 Bắt Trái Tim 💗</div>
-    <div id="scoreBoard">Còn lại: <span id="clicks">10</span> ❤️</div>
-    <div id="gameArea">
-      <div class="heart" id="heart">💖</div>
-    </div>
+    <div id="title">💖 Ghép Hình Trái Tim 💖</div>
+    <div id="instruction">Nhấn 2 ô để đổi chỗ - Sắp xếp theo màu!</div>
+    <div id="puzzleGrid"></div>
+    <div id="moveCounter">Số bước: <span id="moves">0</span></div>
   </div>
   
   <div id="congratsOverlay">
     <div id="congratsMessage">
       <div class="mainText">Hoàng yêu Vy</div>
-      <div class="subText">💖 Mãi mãi bên em 💖</div>
+      <div class="subText">💖 Mãi mãi yêu em 💖</div>
+      <div class="subText">✨ Em là điều kỳ diệu nhất ✨</div>
     </div>
   </div>
 
   <script>
-    const heart = document.getElementById('heart');
-    const gameArea = document.getElementById('gameArea');
-    const clicksDisplay = document.getElementById('clicks');
+    const grid = document.getElementById('puzzleGrid');
+    const movesDisplay = document.getElementById('moves');
     const congratsOverlay = document.getElementById('congratsOverlay');
     
-    let clicksNeeded = 10;
+    const emojis = ['💖', '💕', '💗', '💓', '💝', '💘', '💞', '💟', '❤️'];
+    let pieces = [];
+    let selectedPiece = null;
+    let moves = 0;
     let gameActive = true;
-    let moveSpeed = 1500;
     
-    function randomPosition() {
-      const rect = gameArea.getBoundingClientRect();
-      const maxX = rect.width - 80;
-      const maxY = rect.height - 80;
-      return {
-        x: Math.random() * maxX,
-        y: Math.random() * maxY
-      };
+    function initGame() {
+      pieces = [];
+      for (let i = 0; i < 9; i++) {
+        pieces.push({
+          id: i,
+          emoji: emojis[i],
+          color: i
+        });
+      }
+      
+      // Xáo trộn
+      for (let i = pieces.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [pieces[i], pieces[j]] = [pieces[j], pieces[i]];
+      }
+      
+      renderGrid();
     }
     
-    function moveHeart() {
+    function renderGrid() {
+      grid.innerHTML = '';
+      pieces.forEach((piece, index) => {
+        const div = document.createElement('div');
+        div.className = `puzzle-piece color-${piece.color}`;
+        div.textContent = piece.emoji;
+        div.dataset.index = index;
+        div.addEventListener('click', () => handlePieceClick(index, div));
+        grid.appendChild(div);
+      });
+    }
+    
+    function handlePieceClick(index, element) {
       if (!gameActive) return;
-      const pos = randomPosition();
-      heart.style.left = pos.x + 'px';
-      heart.style.top = pos.y + 'px';
       
-      // Tăng tốc độ dần
-      if (clicksNeeded < 5) {
-        moveSpeed = 1000;
+      createSparkles(
+        element.getBoundingClientRect().left + element.offsetWidth / 2,
+        element.getBoundingClientRect().top + element.offsetHeight / 2
+      );
+      
+      if (selectedPiece === null) {
+        selectedPiece = index;
+        element.classList.add('selected');
+      } else if (selectedPiece === index) {
+        selectedPiece = null;
+        element.classList.remove('selected');
+      } else {
+        document.querySelectorAll('.puzzle-piece')[selectedPiece].classList.remove('selected');
+        
+        [pieces[selectedPiece], pieces[index]] = [pieces[index], pieces[selectedPiece]];
+        
+        moves++;
+        movesDisplay.textContent = moves;
+        
+        selectedPiece = null;
+        renderGrid();
+        
+        setTimeout(checkWin, 300);
       }
     }
     
-    function createParticles(x, y) {
-      const particles = ['✨', '💫', '⭐', '🌟'];
-      for (let i = 0; i < 8; i++) {
-        const particle = document.createElement('div');
-        particle.className = 'particle';
-        particle.textContent = particles[Math.floor(Math.random() * particles.length)];
-        particle.style.left = x + 'px';
-        particle.style.top = y + 'px';
-        document.body.appendChild(particle);
-        
-        setTimeout(() => particle.remove(), 1500);
+    function checkWin() {
+      let sorted = true;
+      for (let i = 0; i < pieces.length - 1; i++) {
+        if (pieces[i].id > pieces[i + 1].id) {
+          sorted = false;
+          break;
+        }
+      }
+      
+      if (sorted) {
+        gameActive = false;
+        setTimeout(showVictory, 500);
       }
     }
     
     function createSparkles(x, y) {
-      for (let i = 0; i < 20; i++) {
+      for (let i = 0; i < 15; i++) {
         const sparkle = document.createElement('div');
         sparkle.className = 'sparkle';
         sparkle.style.left = x + 'px';
         sparkle.style.top = y + 'px';
         
-        const angle = (Math.PI * 2 * i) / 20;
-        const distance = 50 + Math.random() * 50;
+        const angle = (Math.PI * 2 * i) / 15;
+        const distance = 40 + Math.random() * 60;
         sparkle.style.setProperty('--tx', Math.cos(angle) * distance + 'px');
         sparkle.style.setProperty('--ty', Math.sin(angle) * distance + 'px');
         
         document.body.appendChild(sparkle);
-        setTimeout(() => sparkle.remove(), 1500);
+        setTimeout(() => sparkle.remove(), 1000);
       }
     }
     
@@ -397,78 +459,49 @@
         setTimeout(() => {
           const fh = document.createElement('div');
           fh.className = 'floatingHeart';
-          fh.textContent = ['💖', '💕', '💗', '💓', '💝'][Math.floor(Math.random() * 5)];
+          fh.textContent = emojis[Math.floor(Math.random() * emojis.length)];
           fh.style.left = Math.random() * 100 + 'vw';
-          fh.style.bottom = '-50px';
-          fh.style.fontSize = (20 + Math.random() * 30) + 'px';
-          fh.style.animationDuration = (3 + Math.random() * 2) + 's';
-          fh.style.animationDelay = (Math.random() * 0.5) + 's';
+          fh.style.bottom = '-80px';
+          fh.style.fontSize = (25 + Math.random() * 35) + 'px';
+          fh.style.animationDuration = (3 + Math.random() * 2.5) + 's';
           document.body.appendChild(fh);
           
-          setTimeout(() => fh.remove(), 5000);
-        }, i * 50);
+          setTimeout(() => fh.remove(), 6000);
+        }, i * 40);
       }
     }
     
-    function showCongratsMessage() {
+    function showVictory() {
       congratsOverlay.style.display = 'flex';
-      createFloatingHearts(100);
+      createFloatingHearts(150);
       
-      // Tạo hiệu ứng pháo hoa
-      setInterval(() => {
+      // Pháo hoa liên tục
+      let fireworkCount = 0;
+      const fireworkInterval = setInterval(() => {
         const x = Math.random() * window.innerWidth;
         const y = Math.random() * window.innerHeight;
         createSparkles(x, y);
-      }, 500);
+        
+        fireworkCount++;
+        if (fireworkCount > 30) {
+          clearInterval(fireworkInterval);
+        }
+      }, 400);
+      
+      // Trái tim bay liên tục
+      setInterval(() => createFloatingHearts(5), 1000);
     }
     
-    heart.addEventListener('click', (e) => {
-      if (!gameActive) return;
-      
-      clicksNeeded--;
-      clicksDisplay.textContent = clicksNeeded;
-      
-      createParticles(e.pageX, e.pageY);
-      createSparkles(e.pageX, e.pageY);
-      createFloatingHearts(3);
-      
-      // Hiệu ứng rung màn hình nhẹ
-      document.body.style.animation = 'none';
-      setTimeout(() => {
-        document.body.style.animation = '';
-      }, 10);
-      
-      if (clicksNeeded <= 0) {
-        gameActive = false;
-        heart.style.display = 'none';
-        setTimeout(() => {
-          showCongratsMessage();
-        }, 500);
-      } else {
-        moveHeart();
-      }
-    });
-    
-    // Di chuyển trái tim tự động
-    let moveInterval = setInterval(() => {
-      if (gameActive) {
-        moveHeart();
-      } else {
-        clearInterval(moveInterval);
-      }
-    }, moveSpeed);
-    
-    // Khởi động game
-    moveHeart();
-    
-    // Tạo hiệu ứng nền liên tục
+    // Hiệu ứng nền liên tục
     setInterval(() => {
       if (gameActive) {
         const x = Math.random() * window.innerWidth;
         const y = Math.random() * window.innerHeight;
         createSparkles(x, y);
       }
-    }, 2000);
+    }, 2500);
+    
+    initGame();
   </script>
 </body>
 </html>
