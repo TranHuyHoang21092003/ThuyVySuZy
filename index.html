@@ -5,142 +5,470 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Hoàng yêu Vy 💖</title>
 <style>
-  body {
+  * {
     margin: 0;
     padding: 0;
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+  }
+  
+  body {
     height: 100vh;
     overflow: hidden;
     display: flex;
     align-items: center;
     justify-content: center;
-    background: radial-gradient(circle at center, #1a1f3b, #0d1224);
-    color: white;
-    font-family: "Poppins", sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    position: relative;
   }
-
-  h1 {
+  
+  body::before {
+    content: '';
     position: absolute;
-    top: 30px;
-    font-size: 2em;
-    text-align: center;
-    animation: fadeIn 2s ease;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at 20% 50%, rgba(255, 107, 154, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(138, 101, 255, 0.3) 0%, transparent 50%);
+    animation: backgroundPulse 8s ease-in-out infinite;
   }
-
+  
+  @keyframes backgroundPulse {
+    0%, 100% { opacity: 0.5; }
+    50% { opacity: 1; }
+  }
+  
+  #gameContainer {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 1;
+  }
+  
+  #title {
+    position: absolute;
+    top: 40px;
+    font-size: 2.5em;
+    font-weight: bold;
+    color: white;
+    text-shadow: 0 0 20px rgba(255, 255, 255, 0.5),
+                 0 0 40px rgba(255, 107, 154, 0.8);
+    animation: titleGlow 2s ease-in-out infinite;
+    z-index: 10;
+  }
+  
+  @keyframes titleGlow {
+    0%, 100% { 
+      transform: scale(1);
+      text-shadow: 0 0 20px rgba(255, 255, 255, 0.5),
+                   0 0 40px rgba(255, 107, 154, 0.8);
+    }
+    50% { 
+      transform: scale(1.05);
+      text-shadow: 0 0 30px rgba(255, 255, 255, 0.8),
+                   0 0 60px rgba(255, 107, 154, 1);
+    }
+  }
+  
+  #scoreBoard {
+    position: absolute;
+    top: 120px;
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+    padding: 15px 30px;
+    border-radius: 50px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    font-size: 1.2em;
+    color: white;
+    font-weight: bold;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    animation: scoreFloat 3s ease-in-out infinite;
+  }
+  
+  @keyframes scoreFloat {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+  }
+  
   #gameArea {
     position: relative;
-    width: 100vw;
-    height: 100vh;
-    overflow: hidden;
+    width: 90vw;
+    height: 70vh;
+    max-width: 800px;
+    max-height: 600px;
   }
-
+  
   .heart {
     position: absolute;
-    font-size: 40px;
+    font-size: 60px;
     cursor: pointer;
-    animation: float 3s infinite ease-in-out alternate;
+    user-select: none;
+    transition: transform 0.3s ease;
+    filter: drop-shadow(0 0 15px rgba(255, 107, 154, 0.8));
+    animation: heartFloat 3s ease-in-out infinite;
+    z-index: 5;
   }
-
-  @keyframes float {
-    from { transform: translateY(0px); }
-    to { transform: translateY(-20px); }
+  
+  .heart:hover {
+    transform: scale(1.3) rotate(15deg);
   }
-
+  
+  .heart:active {
+    transform: scale(0.9);
+  }
+  
+  @keyframes heartFloat {
+    0%, 100% { 
+      transform: translateY(0) rotate(0deg);
+    }
+    25% { 
+      transform: translateY(-15px) rotate(-5deg);
+    }
+    75% { 
+      transform: translateY(-15px) rotate(5deg);
+    }
+  }
+  
+  .particle {
+    position: absolute;
+    pointer-events: none;
+    font-size: 20px;
+    animation: particleRise 1.5s ease-out forwards;
+    z-index: 20;
+  }
+  
+  @keyframes particleRise {
+    0% {
+      transform: translateY(0) scale(1) rotate(0deg);
+      opacity: 1;
+    }
+    100% {
+      transform: translateY(-100px) scale(0.5) rotate(360deg);
+      opacity: 0;
+    }
+  }
+  
   #message {
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    font-size: 2.5em;
-    color: #ff6b9a;
-    text-shadow: 0 0 10px #ff9bbd;
+    font-size: 3em;
+    font-weight: bold;
+    color: white;
+    text-shadow: 0 0 30px rgba(255, 107, 154, 1),
+                 0 0 60px rgba(255, 107, 154, 0.8),
+                 0 0 90px rgba(255, 107, 154, 0.6);
     opacity: 0;
-    white-space: pre-wrap;
+    white-space: nowrap;
+    z-index: 100;
+    animation: messageReveal 1s ease-out forwards;
   }
-
-  @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(-10px); }
-    to { opacity: 1; transform: translateY(0); }
+  
+  @keyframes messageReveal {
+    0% {
+      opacity: 0;
+      transform: translate(-50%, -50%) scale(0.5);
+    }
+    50% {
+      transform: translate(-50%, -50%) scale(1.2);
+    }
+    100% {
+      opacity: 1;
+      transform: translate(-50%, -50%) scale(1);
+    }
   }
-
+  
   .floatingHeart {
     position: fixed;
-    font-size: 24px;
-    color: #ff8db3;
     pointer-events: none;
-    opacity: 0.9;
-    animation: rise 4s linear forwards;
+    font-size: 30px;
+    color: #ff6b9a;
+    filter: drop-shadow(0 0 10px rgba(255, 107, 154, 0.8));
+    animation: riseUp 4s ease-out forwards;
+    z-index: 50;
   }
-
-  @keyframes rise {
-    0% { transform: translateY(0) scale(1); opacity: 1; }
-    100% { transform: translateY(-600px) scale(1.3); opacity: 0; }
+  
+  @keyframes riseUp {
+    0% {
+      transform: translateY(0) scale(1) rotate(0deg);
+      opacity: 1;
+    }
+    50% {
+      transform: translateY(-300px) scale(1.2) rotate(180deg);
+      opacity: 0.8;
+    }
+    100% {
+      transform: translateY(-600px) scale(1.5) rotate(360deg);
+      opacity: 0;
+    }
+  }
+  
+  .sparkle {
+    position: fixed;
+    width: 4px;
+    height: 4px;
+    background: white;
+    border-radius: 50%;
+    pointer-events: none;
+    animation: sparkleAnimation 1.5s ease-out forwards;
+    box-shadow: 0 0 10px white;
+    z-index: 60;
+  }
+  
+  @keyframes sparkleAnimation {
+    0% {
+      transform: translate(0, 0) scale(1);
+      opacity: 1;
+    }
+    100% {
+      transform: translate(var(--tx), var(--ty)) scale(0);
+      opacity: 0;
+    }
+  }
+  
+  #congratsOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(10px);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    animation: fadeIn 0.5s ease-out;
+  }
+  
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  
+  #congratsMessage {
+    text-align: center;
+    color: white;
+    animation: bounceIn 1s ease-out;
+  }
+  
+  @keyframes bounceIn {
+    0% {
+      transform: scale(0);
+      opacity: 0;
+    }
+    50% {
+      transform: scale(1.2);
+    }
+    100% {
+      transform: scale(1);
+      opacity: 1;
+    }
+  }
+  
+  .mainText {
+    font-size: 4em;
+    font-weight: bold;
+    background: linear-gradient(45deg, #ff6b9a, #ffd700, #ff6b9a);
+    background-size: 200% 200%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: gradientShift 3s ease infinite;
+    text-shadow: 0 0 50px rgba(255, 107, 154, 0.5);
+    margin: 20px 0;
+  }
+  
+  @keyframes gradientShift {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+  }
+  
+  .subText {
+    font-size: 1.5em;
+    margin-top: 10px;
+    opacity: 0.9;
+  }
+  
+  @media (max-width: 768px) {
+    #title { font-size: 1.8em; top: 20px; }
+    #scoreBoard { font-size: 1em; top: 80px; padding: 10px 20px; }
+    .heart { font-size: 50px; }
+    #message { font-size: 2em; }
+    .mainText { font-size: 2.5em; }
+    .subText { font-size: 1.2em; }
+  }
+  
+  @media (max-width: 480px) {
+    #title { font-size: 1.5em; }
+    .heart { font-size: 40px; }
+    #message { font-size: 1.5em; }
+    .mainText { font-size: 2em; }
+    .subText { font-size: 1em; }
   }
 </style>
 </head>
 <body>
-  <div id="gameArea">
-    <h1>💗 Hoàng yêu Vy 💗</h1>
-    <div class="heart" id="heart">💖</div>
-    <div id="message"></div>
+  <div id="gameContainer">
+    <div id="title">💗 Bắt Trái Tim 💗</div>
+    <div id="scoreBoard">Còn lại: <span id="clicks">10</span> ❤️</div>
+    <div id="gameArea">
+      <div class="heart" id="heart">💖</div>
+    </div>
+  </div>
+  
+  <div id="congratsOverlay">
+    <div id="congratsMessage">
+      <div class="mainText">Hoàng yêu Vy</div>
+      <div class="subText">💖 Mãi mãi bên em 💖</div>
+    </div>
   </div>
 
-<script>
-  const heart = document.getElementById('heart');
-  const message = document.getElementById('message');
-  const gameArea = document.getElementById('gameArea');
-  let clicks = 0;
-  let gameActive = true;
-
-  // random position cho trái tim
-  function moveHeart() {
-    if (!gameActive) return;
-    const x = Math.random() * (window.innerWidth - 80);
-    const y = Math.random() * (window.innerHeight - 80);
-    heart.style.left = `${x}px`;
-    heart.style.top = `${y}px`;
-  }
-
-  // tạo hiệu ứng trái tim bay lên
-  function floatingHearts(count = 20) {
-    for (let i = 0; i < count; i++) {
-      const fh = document.createElement('div');
-      fh.classList.add('floatingHeart');
-      fh.textContent = '💖';
-      fh.style.left = Math.random() * 100 + 'vw';
-      fh.style.top = '100vh';
-      fh.style.fontSize = Math.random() * 20 + 10 + 'px';
-      fh.style.animationDuration = 3 + Math.random() * 2 + 's';
-      document.body.appendChild(fh);
-      setTimeout(() => fh.remove(), 5000);
+  <script>
+    const heart = document.getElementById('heart');
+    const gameArea = document.getElementById('gameArea');
+    const clicksDisplay = document.getElementById('clicks');
+    const congratsOverlay = document.getElementById('congratsOverlay');
+    
+    let clicksNeeded = 10;
+    let gameActive = true;
+    let moveSpeed = 1500;
+    
+    function randomPosition() {
+      const rect = gameArea.getBoundingClientRect();
+      const maxX = rect.width - 80;
+      const maxY = rect.height - 80;
+      return {
+        x: Math.random() * maxX,
+        y: Math.random() * maxY
+      };
     }
-  }
-
-  // typing effect
-  function typeMessage(text, i = 0) {
-    if (i < text.length) {
-      message.style.opacity = 1;
-      message.textContent += text.charAt(i);
-      setTimeout(() => typeMessage(text, i + 1), 100);
+    
+    function moveHeart() {
+      if (!gameActive) return;
+      const pos = randomPosition();
+      heart.style.left = pos.x + 'px';
+      heart.style.top = pos.y + 'px';
+      
+      // Tăng tốc độ dần
+      if (clicksNeeded < 5) {
+        moveSpeed = 1000;
+      }
     }
-  }
-
-  // click vào trái tim
-  heart.addEventListener('click', () => {
-    clicks++;
-    moveHeart();
-    if (clicks >= 3) {
-      gameActive = false;
-      heart.style.display = 'none';
-      floatingHearts(50);
+    
+    function createParticles(x, y) {
+      const particles = ['✨', '💫', '⭐', '🌟'];
+      for (let i = 0; i < 8; i++) {
+        const particle = document.createElement('div');
+        particle.className = 'particle';
+        particle.textContent = particles[Math.floor(Math.random() * particles.length)];
+        particle.style.left = x + 'px';
+        particle.style.top = y + 'px';
+        document.body.appendChild(particle);
+        
+        setTimeout(() => particle.remove(), 1500);
+      }
+    }
+    
+    function createSparkles(x, y) {
+      for (let i = 0; i < 20; i++) {
+        const sparkle = document.createElement('div');
+        sparkle.className = 'sparkle';
+        sparkle.style.left = x + 'px';
+        sparkle.style.top = y + 'px';
+        
+        const angle = (Math.PI * 2 * i) / 20;
+        const distance = 50 + Math.random() * 50;
+        sparkle.style.setProperty('--tx', Math.cos(angle) * distance + 'px');
+        sparkle.style.setProperty('--ty', Math.sin(angle) * distance + 'px');
+        
+        document.body.appendChild(sparkle);
+        setTimeout(() => sparkle.remove(), 1500);
+      }
+    }
+    
+    function createFloatingHearts(count) {
+      for (let i = 0; i < count; i++) {
+        setTimeout(() => {
+          const fh = document.createElement('div');
+          fh.className = 'floatingHeart';
+          fh.textContent = ['💖', '💕', '💗', '💓', '💝'][Math.floor(Math.random() * 5)];
+          fh.style.left = Math.random() * 100 + 'vw';
+          fh.style.bottom = '-50px';
+          fh.style.fontSize = (20 + Math.random() * 30) + 'px';
+          fh.style.animationDuration = (3 + Math.random() * 2) + 's';
+          fh.style.animationDelay = (Math.random() * 0.5) + 's';
+          document.body.appendChild(fh);
+          
+          setTimeout(() => fh.remove(), 5000);
+        }, i * 50);
+      }
+    }
+    
+    function showCongratsMessage() {
+      congratsOverlay.style.display = 'flex';
+      createFloatingHearts(100);
+      
+      // Tạo hiệu ứng pháo hoa
+      setInterval(() => {
+        const x = Math.random() * window.innerWidth;
+        const y = Math.random() * window.innerHeight;
+        createSparkles(x, y);
+      }, 500);
+    }
+    
+    heart.addEventListener('click', (e) => {
+      if (!gameActive) return;
+      
+      clicksNeeded--;
+      clicksDisplay.textContent = clicksNeeded;
+      
+      createParticles(e.pageX, e.pageY);
+      createSparkles(e.pageX, e.pageY);
+      createFloatingHearts(3);
+      
+      // Hiệu ứng rung màn hình nhẹ
+      document.body.style.animation = 'none';
       setTimeout(() => {
-        typeMessage("Anh yêu em 💖");
-      }, 1000);
-    }
-  });
-
-  // di chuyển trái tim liên tục
-  setInterval(moveHeart, 1500);
-  moveHeart();
-</script>
+        document.body.style.animation = '';
+      }, 10);
+      
+      if (clicksNeeded <= 0) {
+        gameActive = false;
+        heart.style.display = 'none';
+        setTimeout(() => {
+          showCongratsMessage();
+        }, 500);
+      } else {
+        moveHeart();
+      }
+    });
+    
+    // Di chuyển trái tim tự động
+    let moveInterval = setInterval(() => {
+      if (gameActive) {
+        moveHeart();
+      } else {
+        clearInterval(moveInterval);
+      }
+    }, moveSpeed);
+    
+    // Khởi động game
+    moveHeart();
+    
+    // Tạo hiệu ứng nền liên tục
+    setInterval(() => {
+      if (gameActive) {
+        const x = Math.random() * window.innerWidth;
+        const y = Math.random() * window.innerHeight;
+        createSparkles(x, y);
+      }
+    }, 2000);
+  </script>
 </body>
 </html>
